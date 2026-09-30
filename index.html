@@ -1,224 +1,342 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lecteur Audio</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon App Musique & Clips</title>
+  <!-- Ajout du décodeur vidéo HLS -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    html {
+      background-color: #000000;
+      min-height: 100%;
     }
-
+    
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0f172a;
-      color: #f8fafc;
+      font-family: system-ui, sans-serif;
+      background-color: #000000;
+      background-image: url('./fond.png');
+      background-repeat: no-repeat;
+      background-position: center top;  /* Affiche le haut de l'image en priorité */
+      background-size: 100% auto;       /* Adapte la largeur sans couper l'image */
+      background-attachment: scroll;    /* L'image défile naturellement avec le contenu */
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
     }
 
-    .container {
-      width: 100%;
-      max-width: 600px;
+    h1, h2 { 
+      text-align: center; 
+      color: #f39c12; 
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     }
-
-    h1 {
+    
+    /* EN-TÊTE LOGO + TEXTE DE BIENVENUE */
+    .header {
       text-align: center;
-      margin-bottom: 1.5rem;
-      font-weight: 600;
-      color: #38bdf8;
+      max-width: 650px;
+      margin: 0 auto 30px auto;
     }
-
-    /* Player Card */
-    .player-card {
-      background: #1e293b;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      margin-bottom: 2rem;
-      text-align: center;
+    .logo-svg {
+      width: 280px;
+      max-width: 85%;
+      height: auto;
+      margin-bottom: 15px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.7));
     }
-
-    .track-info {
-      margin-bottom: 1rem;
-    }
-
-    .track-title {
-      font-size: 1.25rem;
-      font-weight: bold;
-      color: #ffffff;
-    }
-
-    .track-artist {
+    .welcome-text {
+      color: #fce072;
       font-size: 0.95rem;
-      color: #94a3b8;
-      margin-top: 0.25rem;
-    }
-
-    audio {
-      width: 100%;
-      margin-top: 1rem;
-      outline: none;
-    }
-
-    .btn-download {
-      margin-top: 1rem;
-      padding: 0.65rem 1.2rem;
-      background-color: #38bdf8;
-      color: #0f172a;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-      width: 100%;
-      font-size: 0.95rem;
-    }
-
-    .btn-download:hover {
-      background-color: #0284c7;
-      color: #ffffff;
-    }
-
-    .btn-download:disabled {
-      background-color: #475569;
-      color: #94a3b8;
-      cursor: not-allowed;
-    }
-
-    /* Playlist */
-    .playlist-title {
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-      color: #cbd5e1;
-    }
-
-    .playlist {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .playlist-item {
-      background: #1e293b;
-      padding: 0.85rem 1rem;
+      line-height: 1.5;
+      font-weight: 500;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.9);
+      background: rgba(0, 0, 0, 0.55);
+      padding: 15px;
       border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    }
+
+    /* CONTENEURS SEMI-TRANSPARENTS */
+    .player-container, .audio-section {
+      max-width: 800px;
+      margin: 0 auto 30px auto;
+      background: rgba(20, 20, 20, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    }
+
+    video, audio {
+      width: 100%;
+      border-radius: 6px;
+    }
+    video {
+      max-height: 450px;
+      background-color: #000;
+    }
+
+    /* CONTENEUR BOUTON TÉLÉCHARGEMENT */
+    .download-container {
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .download-btn {
+      display: inline-block;
+      padding: 10px 18px;
+      background-color: #27ae60;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 20px;
       cursor: pointer;
-      transition: background 0.2s ease, transform 0.1s ease;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     }
 
-    .playlist-item:hover {
-      background: #334155;
+    .download-btn:hover {
+      background-color: #2ecc71;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(39, 174, 96, 0.4);
     }
 
-    .playlist-item.active {
-      border-left: 4px solid #38bdf8;
-      background: #334155;
+    .download-btn:disabled {
+      background-color: #7f8c8d;
+      cursor: wait;
     }
 
-    .item-info .title {
-      font-weight: 600;
-      font-size: 0.95rem;
+    /* STYLES MENU DÉROULANT AUDIO */
+    .audio-select {
+      width: 100%;
+      padding: 12px 15px;
+      margin-top: 15px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #f39c12;
+      background-color: rgba(30, 30, 30, 0.9);
+      color: #ffffff;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .audio-select:focus {
+      border-color: #f1c40f;
+      box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+    }
+    .audio-select option {
+      background-color: #1a1a1a;
+      color: #ffffff;
+      padding: 10px;
     }
 
-    .item-info .artist {
-      font-size: 0.8rem;
-      color: #94a3b8;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .card {
+      background: rgba(20, 20, 20, 0.8);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover { 
+      transform: scale(1.03); 
+      border-color: #f39c12;
+    }
+    .card img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+    }
+    .card-title {
+      padding: 10px;
+      font-size: 0.9em;
+      font-weight: bold;
+    }
+
+    /* PIED DE PAGE ET BOUTON LIEN EXTERNE */
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding-bottom: 20px;
+    }
+    .social-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #f39c12;
+      color: #000000;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+    .social-btn:hover {
+      background-color: #f1c40f;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(243, 156, 18, 0.4);
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Mon Lecteur Audio</h1>
+  <!-- ENTÊTE (LOGO + TEXTE DE BIENVENUE) -->
+  <header class="header">
+    <img src="path2.svg" alt="Setka Logo" class="logo-svg">
+    <p class="welcome-text">
+      Bienvenue chez setka,<br>
+      ici tes données ne seront pas revendues et aucune pub ne viendra<br>
+      altérer ton moment, certainement moins ergonomique que<br>
+      instagram, spotify ou autres applications farfelues,<br>
+      ici tu est dans un espace plus sur et plus éthique =)<br>
+      Merci de soutenir ma musique, bonne écoute/visionnage.
+    </p>
+  </header>
 
-    <!-- Card Lecteur -->
-    <div class="player-card">
-      <div class="track-info">
-        <div class="track-title" id="currentTitle">Sélectionnez une piste</div>
-        <div class="track-artist" id="currentArtist">-</div>
-      </div>
-
-      <audio id="audioPlayer" controls></audio>
-
-      <button id="downloadBtn" class="btn-download" disabled>
-        📥 Télécharger ce morceau
+  <!-- Lecteur Audio (Scaleway) -->
+  <div class="audio-section">
+    <h2>Lecteur Audio</h2>
+    <audio id="audio-player" controls style="margin-bottom: 10px;"></audio>
+    <div id="audio-title" style="font-weight: bold; margin-bottom: 10px; text-align: center;">Sélectionne un morceau</div>
+    
+    <!-- Bouton de Téléchargement Direct -->
+    <div class="download-container">
+      <button id="download-btn" class="download-btn" style="display: none;">
+        ⬇️ Télécharge le morceau qui joue
       </button>
     </div>
 
-    <!-- Playlist -->
-    <div class="playlist-title">Playlist</div>
-    <ul class="playlist" id="playlist"></ul>
+    <!-- Menu déroulant pour la playlist -->
+    <select id="audio-select" class="audio-select">
+      <option value="" disabled selected>-- Choisis un son à écouter --</option>
+    </select>
   </div>
 
+  <!-- Lecteur Vidéo (PeerTube) -->
+  <div class="player-container">
+    <h2>Clips & Vidéos</h2>
+    <video id="main-player" controls></video>
+    <h3 id="player-title" style="margin-top: 10px; font-size: 1.1em; text-align: center;">Sélectionne une vidéo</h3>
+  </div>
+
+  <div class="grid" id="video-grid">
+    <p>Chargement des pistes...</p>
+  </div>
+
+  <!-- PIED DE PAGE -->
+  <footer>
+    <a href="https://video.antopie.org/c/setka_official/videos" target="_blank" rel="noopener" class="social-btn">
+      🎬 Suis-moi sur Antopie (PeerTube)
+    </a>
+  </footer>
+
   <script>
-    // 1. Liste de tes morceaux enregistrés sur Scaleway
-    const tracks = [
+    // --- SECTION AUDIO (SCALEWAY) ---
+    const wavPlaylist = [
       {
-        title: "Piste 1",
-        artist: "Artiste 1",
-        url: "https://votre-bucket.s3.fr-par.scw.cloud/chanson1.mp3"
+        title: "Jai pas vu lheure - Hill and Gully riddim (2026)",
+        artist: "Setka",
+        url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Jai%20pas%20vu%20lheure%20-%20Hill%20and%20Gully%20riddim%20%282026%29.mp3"
       },
       {
-        title: "Piste 2",
-        artist: "Artiste 2",
-        url: "https://votre-bucket.s3.fr-par.scw.cloud/chanson2.mp3"
+        title: "Mirage (2023)",
+        artist: "Setka",
+        url: "https://setkamusic.s3.fr-par.scw.cloud/Mirage%20-%20Setka%20%282023%29.mp3"
+      },
+      {
+        title: "Musical buziness (2016)",
+        artist: "Setka",
+        url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Musical%20buziness%20%282016%29.mp3"
+      },
+      {
+        title: "Ghetto (2016)",
+        artist: "Setka",
+        url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Ghetto%20%282016%29.mp3"
+      },
+      {
+        title: "Policeman",
+        artist: "Setka",
+        url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Policeman.mp3"
+      },
+      {
+        title: "Remember",
+        artist: "Setka",
+        url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Remember.mp3"
+      },
+      {
+        title: "Vampayah buildings (2017)",
+        artist: "Setka",
+        url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Vampayah%20buildings%20%282017%29.mp3"
+      },
+      {
+        title: "Freestyle",
+        artist: "Setka feat Makk Senseî",
+        url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20feat%20Makk%20Sense%C3%AE%20-%20Freestyle.mp3"
+      },
+      {
+        title: "Freestyle SKD",
+        artist: "Setka",
+        url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20freestyle%20SKD.mp3"
       }
     ];
 
-    // Éléments du DOM
-    const audioPlayer = document.getElementById('audioPlayer');
-    const currentTitle = document.getElementById('currentTitle');
-    const currentArtist = document.getElementById('currentArtist');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const playlistEl = document.getElementById('playlist');
+    const audioPlayer = document.getElementById('audio-player');
+    const audioTitle = document.getElementById('audio-title');
+    const audioSelect = document.getElementById('audio-select');
+    const downloadBtn = document.getElementById('download-btn');
 
     let currentTrack = null;
 
-    // 2. Génération de la playlist HTML
-    tracks.forEach((track, index) => {
-      const li = document.createElement('li');
-      li.className = 'playlist-item';
-      li.innerHTML = `
-        <div class="item-info">
-          <div class="title">${track.title}</div>
-          <div class="artist">${track.artist}</div>
-        </div>
-      `;
-
-      li.addEventListener('click', () => playTrack(index));
-      playlistEl.appendChild(li);
-    });
-
-    // 3. Charger et jouer un morceau
-    function playTrack(index) {
-      currentTrack = tracks[index];
-
-      // Mise à jour de l'affichage
-      currentTitle.textContent = currentTrack.title;
-      currentArtist.textContent = currentTrack.artist;
-      audioPlayer.src = currentTrack.url;
-      downloadBtn.disabled = false;
-
-      // Gestion de la classe active dans la liste
-      const items = playlistEl.querySelectorAll('.playlist-item');
-      items.forEach((item, i) => {
-        item.classList.toggle('active', i === index);
+    function initAudioPlayer() {
+      wavPlaylist.forEach((track, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${track.artist} - ${track.title}`;
+        audioSelect.appendChild(option);
       });
-
-      audioPlayer.play();
     }
 
-    // 4. Téléchargement direct en contournant le blocage CORS via le proxy
+    audioSelect.addEventListener('change', (e) => {
+      const index = e.target.value;
+      if (index !== "") {
+        playAudio(index);
+      }
+    });
+
+    function playAudio(index) {
+      currentTrack = wavPlaylist[index];
+      audioPlayer.src = currentTrack.url;
+      audioTitle.textContent = `${currentTrack.artist} - ${currentTrack.title}`;
+      audioPlayer.play();
+
+      downloadBtn.style.display = 'inline-block';
+      downloadBtn.textContent = "⬇️ Télécharge le morceau qui joue";
+      downloadBtn.disabled = false;
+
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: currentTrack.title,
+          artist: currentTrack.artist
+        });
+      }
+    }
+
+    // Téléchargement direct avec proxy CORS
     downloadBtn.addEventListener('click', async () => {
       if (!currentTrack) return;
 
@@ -226,7 +344,6 @@
       downloadBtn.textContent = "⏳ Téléchargement en cours...";
       downloadBtn.disabled = true;
 
-      // Utilisation du proxy CORS universel corsproxy.io
       const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(currentTrack.url);
 
       try {
@@ -246,18 +363,115 @@
         window.URL.revokeObjectURL(blobUrl);
       } catch (err) {
         console.error("Erreur téléchargement :", err);
-        // Lien de secours si le proxy ne répond pas
-        const a = document.createElement('a');
-        a.href = currentTrack.url;
-        a.target = "_blank";
-        a.download = `${currentTrack.artist} - ${currentTrack.title}.mp3`;
-        a.click();
+        // Solution de secours si le proxy ne répond pas
+        window.open(currentTrack.url, '_blank');
       } finally {
         downloadBtn.textContent = originalText;
         downloadBtn.disabled = false;
       }
     });
-  </script>
 
+    initAudioPlayer();
+
+    // --- SECTION VIDEO (PEERTUBE) ---
+    const INSTANCE = "https://video.antopie.org";
+    const CHANNEL = "setka_official";
+    const USERNAME = "setkaabwoy";
+    let hlsPlayer = null;
+
+    async function fetchVideos() {
+      const grid = document.getElementById('video-grid');
+      const endpoints = [
+        `${INSTANCE}/api/v1/video-channels/${CHANNEL}/videos`,
+        `${INSTANCE}/api/v1/accounts/${USERNAME}/videos`
+      ];
+
+      let videos = [];
+
+      for (const url of endpoints) {
+        try {
+          const response = await fetch(url);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.data && data.data.length > 0) {
+              videos = data.data;
+              break;
+            }
+          }
+        } catch (e) {
+          console.warn("Erreur :", e);
+        }
+      }
+
+      grid.innerHTML = '';
+
+      if (videos.length === 0) {
+        grid.innerHTML = '<p>Aucune vidéo trouvée.</p>';
+        return;
+      }
+
+      videos.forEach(video => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${INSTANCE}${video.thumbnailPath}" alt="${video.name}">
+          <div class="card-title">${video.name}</div>
+        `;
+        card.onclick = () => loadVideoDetails(video.id, video.name);
+        grid.appendChild(card);
+      });
+    }
+
+    async function loadVideoDetails(videoId, title) {
+      try {
+        const response = await fetch(`${INSTANCE}/api/v1/videos/${videoId}`);
+        const data = await response.json();
+        const player = document.getElementById('main-player');
+
+        if (!audioPlayer.paused) {
+          audioPlayer.pause();
+        }
+
+        let streamUrl = "";
+        let mp4Url = "";
+
+        if (data.streamingPlaylists && data.streamingPlaylists.length > 0) {
+          streamUrl = data.streamingPlaylists[0].playlistUrl;
+        }
+        if (data.files && data.files.length > 0) {
+          mp4Url = data.files[0].fileUrl;
+        }
+
+        document.getElementById('player-title').textContent = title;
+
+        player.pause();
+        player.removeAttribute('src');
+        player.load();
+
+        if (hlsPlayer) {
+          hlsPlayer.destroy();
+          hlsPlayer = null;
+        }
+
+        if (streamUrl && Hls.isSupported()) {
+          hlsPlayer = new Hls();
+          hlsPlayer.loadSource(streamUrl);
+          hlsPlayer.attachMedia(player);
+          hlsPlayer.on(Hls.Events.MANIFEST_PARSED, () => {
+            player.play().catch(e => console.log("Lecture automatique bloquée :", e));
+          });
+        } 
+        else if (mp4Url) {
+          player.src = mp4Url;
+          player.play().catch(e => console.log("Lecture automatique bloquée :", e));
+        }
+
+      } catch (e) {
+        console.error("Erreur lecture vidéo :", e);
+      }
+    }
+
+    fetchVideos();
+  </script>
 </body>
 </html>
