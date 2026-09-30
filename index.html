@@ -81,25 +81,28 @@
       background-color: #000;
     }
 
-    .track-list {
-      list-style: none;
-      padding: 0;
+    /* STYLES MENU DÉROULANT AUDIO */
+    .audio-select {
+      width: 100%;
+      padding: 12px 15px;
       margin-top: 15px;
-    }
-    .track-item {
-      padding: 10px 15px;
-      background: rgba(42, 42, 42, 0.75);
-      margin-bottom: 8px;
-      border-radius: 5px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #f39c12;
+      background-color: rgba(30, 30, 30, 0.9);
+      color: #ffffff;
+      outline: none;
       cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      transition: all 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .track-item:hover {
-      background: #f39c12;
-      color: #000;
-      font-weight: bold;
+    .audio-select:focus {
+      border-color: #f1c40f;
+      box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+    }
+    .audio-select option {
+      background-color: #1a1a1a;
+      color: #ffffff;
+      padding: 10px;
     }
 
     .grid {
@@ -177,8 +180,12 @@
   <div class="audio-section">
     <h2>Lecteur Audio</h2>
     <audio id="audio-player" controls style="margin-bottom: 10px;"></audio>
-    <div id="audio-title" style="font-weight: bold; margin-bottom: 10px; text-align: center;">Sélectionne une piste audio</div>
-    <ul class="track-list" id="audio-list"></ul>
+    <div id="audio-title" style="font-weight: bold; margin-bottom: 10px; text-align: center;">Sélectionne un morceau</div>
+    
+    <!-- Menu déroulant pour la playlist -->
+    <select id="audio-select" class="audio-select">
+      <option value="" disabled selected>-- Choisis un son à écouter --</option>
+    </select>
   </div>
 
   <!-- Lecteur Vidéo (PeerTube) -->
@@ -251,18 +258,23 @@
 
     const audioPlayer = document.getElementById('audio-player');
     const audioTitle = document.getElementById('audio-title');
-    const audioList = document.getElementById('audio-list');
+    const audioSelect = document.getElementById('audio-select');
 
     function initAudioPlayer() {
-      audioList.innerHTML = '';
       wavPlaylist.forEach((track, index) => {
-        const li = document.createElement('li');
-        li.className = 'track-item';
-        li.innerHTML = `<span>${track.title}</span> <span>${track.artist}</span>`;
-        li.onclick = () => playAudio(index);
-        audioList.appendChild(li);
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${track.artist} - ${track.title}`;
+        audioSelect.appendChild(option);
       });
     }
+
+    audioSelect.addEventListener('change', (e) => {
+      const index = e.target.value;
+      if (index !== "") {
+        playAudio(index);
+      }
+    });
 
     function playAudio(index) {
       const track = wavPlaylist[index];
