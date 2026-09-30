@@ -133,6 +133,29 @@
       font-size: 0.9em;
       font-weight: bold;
     }
+
+    /* PIED DE PAGE ET BOUTON LIEN EXTERNE */
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding-bottom: 20px;
+    }
+    .social-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #f39c12;
+      color: #000000;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+    .social-btn:hover {
+      background-color: #f1c40f;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(243, 156, 18, 0.4);
+    }
   </style>
 </head>
 <body>
@@ -168,6 +191,13 @@
   <div class="grid" id="video-grid">
     <p>Chargement des pistes...</p>
   </div>
+
+  <!-- PIED DE PAGE -->
+  <footer>
+    <a href="https://video.antopie.org/c/setka_official/videos" target="_blank" rel="noopener" class="social-btn">
+      🎬 Suis-moi sur Antopie (PeerTube)
+    </a>
+  </footer>
 
   <script>
     // --- SECTION AUDIO (SCALEWAY) ---
