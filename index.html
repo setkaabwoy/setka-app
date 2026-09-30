@@ -168,10 +168,29 @@
       border-radius: 20px;
       transition: all 0.2s ease;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      margin: 5px;
     }
     .social-btn:hover {
       background-color: #f1c40f;
       transform: translateY(-2px);
+    }
+
+    /* SECTION PLATEFORMES CENTRALISÉES */
+    .centralized-section {
+      margin-top: 35px;
+      text-align: center;
+    }
+    .centralized-text {
+      color: #fce072;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+    .centralized-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
     }
   </style>
 </head>
@@ -221,9 +240,29 @@
 
   <!-- PIED DE PAGE -->
   <footer>
-    <a href="https://video.antopie.org/c/setka_official/videos" target="_blank" rel="noopener" class="social-btn">
-      🎬 Suis-moi sur Antopie (PeerTube)
-    </a>
+    <div>
+      <a href="https://video.antopie.org/c/setka_official/videos" target="_blank" rel="noopener" class="social-btn">
+        🎬 Suis-moi sur Antopie (PeerTube)
+      </a>
+    </div>
+    <div>
+      <a href="https://mastodon.social/@setkaabwoy" target="_blank" rel="noopener" class="social-btn">
+        🐘 Suis-moi sur Mastodon
+      </a>
+    </div>
+
+    <!-- PLATEFORMES CENTRALISÉES -->
+    <div class="centralized-section">
+      <p class="centralized-text">Si tu préfères me suivre sur des plateformes plus centralisées :</p>
+      <div class="centralized-buttons">
+        <a href="https://www.instagram.com/setkaabwoy/" target="_blank" rel="noopener" class="social-btn">
+          📷 Instagram
+        </a>
+        <a href="https://www.youtube.com/@Setkabwoy" target="_blank" rel="noopener" class="social-btn">
+          ▶️ YouTube
+        </a>
+      </div>
+    </div>
   </footer>
 
   <script>
@@ -271,7 +310,6 @@
       }
     });
 
-    // ÉCOUTEUR 'ENDED' : Lance automatiquement le morceau suivant quand le premier se termine
     audioPlayer.addEventListener('ended', () => {
       if (currentTrackIndex + 1 < wavPlaylist.length) {
         playTrack(currentTrackIndex + 1);
