@@ -81,6 +81,31 @@
       background-color: #000;
     }
 
+    /* CONTENEUR BOUTON TÉLÉCHARGEMENT */
+    .download-container {
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .download-btn {
+      display: inline-block;
+      padding: 10px 18px;
+      background-color: #27ae60;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9rem;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .download-btn:hover {
+      background-color: #2ecc71;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(39, 174, 96, 0.4);
+    }
+
     /* STYLES MENU DÉROULANT AUDIO */
     .audio-select {
       width: 100%;
@@ -182,6 +207,13 @@
     <audio id="audio-player" controls style="margin-bottom: 10px;"></audio>
     <div id="audio-title" style="font-weight: bold; margin-bottom: 10px; text-align: center;">Sélectionne un morceau</div>
     
+    <!-- Bouton de Téléchargement Direct -->
+    <div class="download-container">
+      <a id="download-btn" href="#" download target="_blank" class="download-btn" style="display: none;">
+        ⬇️ Télécharge le morceau qui joue
+      </a>
+    </div>
+
     <!-- Menu déroulant pour la playlist -->
     <select id="audio-select" class="audio-select">
       <option value="" disabled selected>-- Choisis un son à écouter --</option>
@@ -259,6 +291,7 @@
     const audioPlayer = document.getElementById('audio-player');
     const audioTitle = document.getElementById('audio-title');
     const audioSelect = document.getElementById('audio-select');
+    const downloadBtn = document.getElementById('download-btn');
 
     function initAudioPlayer() {
       wavPlaylist.forEach((track, index) => {
@@ -281,6 +314,11 @@
       audioPlayer.src = track.url;
       audioTitle.textContent = `${track.artist} - ${track.title}`;
       audioPlayer.play();
+
+      // Mise à jour du bouton de téléchargement
+      downloadBtn.href = track.url;
+      downloadBtn.download = `${track.artist} - ${track.title}.mp3`;
+      downloadBtn.style.display = 'inline-block';
 
       if ('mediaSession' in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
