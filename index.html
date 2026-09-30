@@ -95,7 +95,9 @@
       text-decoration: none;
       font-weight: bold;
       font-size: 0.9rem;
+      border: none;
       border-radius: 20px;
+      cursor: pointer;
       transition: all 0.2s ease;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     }
@@ -104,6 +106,11 @@
       background-color: #2ecc71;
       transform: translateY(-2px);
       box-shadow: 0 6px 15px rgba(39, 174, 96, 0.4);
+    }
+
+    .download-btn:disabled {
+      background-color: #7f8c8d;
+      cursor: wait;
     }
 
     /* STYLES MENU DÉROULANT AUDIO */
@@ -209,9 +216,9 @@
     
     <!-- Bouton de Téléchargement Direct -->
     <div class="download-container">
-      <a id="download-btn" href="#" download target="_blank" class="download-btn" style="display: none;">
+      <button id="download-btn" class="download-btn" style="display: none;">
         ⬇️ Télécharge le morceau qui joue
-      </a>
+      </button>
     </div>
 
     <!-- Menu déroulant pour la playlist -->
@@ -293,6 +300,8 @@
     const audioSelect = document.getElementById('audio-select');
     const downloadBtn = document.getElementById('download-btn');
 
+    let currentTrack = null;
+
     function initAudioPlayer() {
       wavPlaylist.forEach((track, index) => {
         const option = document.createElement('option');
@@ -310,23 +319,54 @@
     });
 
     function playAudio(index) {
-      const track = wavPlaylist[index];
-      audioPlayer.src = track.url;
-      audioTitle.textContent = `${track.artist} - ${track.title}`;
+      currentTrack = wavPlaylist[index];
+      audioPlayer.src = currentTrack.url;
+      audioTitle.textContent = `${currentTrack.artist} - ${currentTrack.title}`;
       audioPlayer.play();
 
-      // Mise à jour du bouton de téléchargement
-      downloadBtn.href = track.url;
-      downloadBtn.download = `${track.artist} - ${track.title}.mp3`;
+      // Affiche le bouton de téléchargement
       downloadBtn.style.display = 'inline-block';
+      downloadBtn.textContent = "⬇️ Télécharge le morceau qui joue";
+      downloadBtn.disabled = false;
 
       if ('mediaSession' in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: track.title,
-          artist: track.artist
+          title: currentTrack.title,
+          artist: currentTrack.artist
         });
       }
     }
+
+    // Gestion de la force de téléchargement direct via Blob
+    downloadBtn.addEventListener('click', async () => {
+      if (!currentTrack) return;
+
+      const originalText = downloadBtn.textContent;
+      downloadBtn.textContent = "⏳ Téléchargement en cours...";
+      downloadBtn.disabled = true;
+
+      try {
+        const response = await fetch(currentTrack.url);
+        const blob = await response.blob();
+        
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = `${currentTrack.artist} - ${currentTrack.title}.mp3`;
+        document.body.appendChild(a);
+        a.click();
+        
+        a.remove();
+        window.URL.revokeObjectURL(blobUrl);
+      } catch (err) {
+        console.error("Erreur de téléchargement :", err);
+        // Solution de secours si la sécurité navigateur bloque le fetch
+        window.open(currentTrack.url, '_blank');
+      } finally {
+        downloadBtn.textContent = originalText;
+        downloadBtn.disabled = false;
+      }
+    });
 
     initAudioPlayer();
 
