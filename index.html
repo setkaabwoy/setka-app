@@ -175,6 +175,13 @@
       transform: translateY(-2px);
     }
 
+    .social-row {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
     /* SECTION PLATEFORMES CENTRALISÉES */
     .centralized-section {
       margin-top: 35px;
@@ -186,11 +193,17 @@
       margin-bottom: 12px;
       font-weight: 500;
     }
-    .centralized-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
+
+    /* SECTION CONTACT */
+    .contact-text {
+      color: #ffffff;
+      font-size: 0.95rem;
+      margin-top: 35px;
+      font-weight: 500;
+    }
+    .contact-link {
+      color: #f39c12;
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -240,21 +253,20 @@
 
   <!-- PIED DE PAGE -->
   <footer>
-    <div>
+    <!-- PEERTUBE ET MASTODON CÔTE À CÔTE -->
+    <div class="social-row">
       <a href="https://video.antopie.org/c/setka_official/videos" target="_blank" rel="noopener" class="social-btn">
         🎬 Suis-moi sur Antopie (PeerTube)
       </a>
-    </div>
-    <div>
       <a href="https://mastodon.social/@setkaabwoy" target="_blank" rel="noopener" class="social-btn">
         🐘 Suis-moi sur Mastodon
       </a>
     </div>
 
-    <!-- PLATEFORMES CENTRALISÉES -->
+    <!-- PLATEFORMES CENTRALISÉES CÔTE À CÔTE -->
     <div class="centralized-section">
       <p class="centralized-text">Si tu préfères me suivre sur des plateformes plus centralisées :</p>
-      <div class="centralized-buttons">
+      <div class="social-row">
         <a href="https://www.instagram.com/setkaabwoy/" target="_blank" rel="noopener" class="social-btn">
           📷 Instagram
         </a>
@@ -263,6 +275,11 @@
         </a>
       </div>
     </div>
+
+    <!-- EMAIL DE CONTACT -->
+    <p class="contact-text">
+      Contacte moi : <a href="mailto:setkaabwoy@protonmail.com" class="contact-link">setkaabwoy@protonmail.com</a>
+    </p>
   </footer>
 
   <script>
