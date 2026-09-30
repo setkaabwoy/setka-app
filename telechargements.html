@@ -136,6 +136,39 @@
       background-color: #2ecc71;
       transform: scale(1.03);
     }
+
+    /* BLOC BANDCAMP EN BAS */
+    .bandcamp-box {
+      margin-top: 30px;
+      background: rgba(30, 144, 255, 0.15);
+      border: 2px solid #1e90ff;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      color: #87cefa;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .bandcamp-btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 12px 24px;
+      background-color: #1e90ff;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      border-radius: 25px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .bandcamp-btn:hover {
+      background-color: #63b3ed;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
@@ -157,6 +190,14 @@
 
     <!-- LISTE DES MORCEAUX -->
     <div class="track-list" id="track-list"></div>
+
+    <!-- ALTERNATIVE BANDCAMP -->
+    <div class="bandcamp-box">
+      Si tu n'arrives pas à télécharger directement ici avec ton appareil, go sur Bandcamp :<br>
+      <a href="https://setkaabwoy.bandcamp.com/album/setka-discography" target="_blank" class="bandcamp-btn">
+        🎵 Discographie Setka sur Bandcamp
+      </a>
+    </div>
   </div>
 
   <script>
@@ -180,7 +221,7 @@
       item.innerHTML = `
         <span class="track-name">${track.artist} - ${track.title}</span>
         <a href="${track.url}" download target="_blank" class="download-btn">
-          ⬇️️ Télécharger
+          ⬇ Télécharger
         </a>
       `;
       trackListContainer.appendChild(item);
