@@ -17,9 +17,9 @@
       background-color: #000000;
       background-image: url('./fond.png');
       background-repeat: no-repeat;
-      background-position: center top;  /* Affiche le haut de l'image en priorité */
-      background-size: 100% auto;       /* Adapte la largeur sans couper l'image */
-      background-attachment: scroll;    /* L'image défile naturellement avec le contenu */
+      background-position: center top;
+      background-size: 100% auto;
+      background-attachment: scroll;
       color: #ffffff;
       margin: 0;
       padding: 20px;
@@ -60,7 +60,7 @@
     }
 
     /* CONTENEURS SEMI-TRANSPARENTS */
-    .player-container, .audio-section, .download-section {
+    .player-container, .audio-section {
       max-width: 800px;
       margin: 0 auto 30px auto;
       background: rgba(20, 20, 20, 0.75);
@@ -141,6 +141,17 @@
     }
     .download-link-btn:hover {
       background-color: #f1c40f;
+    }
+
+    .download-help-text {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-top: 12px;
+      text-align: center;
+      line-height: 1.4;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 8px 12px;
+      border-radius: 6px;
     }
 
     /* STYLES MENU DÉROULANT AUDIO */
@@ -255,7 +266,12 @@
     </button>
 
     <!-- Zone contenant la liste complète des morceaux à télécharger -->
-    <div id="download-list" class="download-list"></div>
+    <div id="download-list" class="download-list">
+      <div id="download-items-container"></div>
+      <p class="download-help-text">
+        💡 <strong>Astuce :</strong> Si le morceau s'ouvre dans ton navigateur au lieu de se télécharger, clique sur les 3 petits points (<strong>⋮</strong>) sur le lecteur qui apparaît, puis choisis <strong>« Enregistrer »</strong>.
+      </p>
+    </div>
   </div>
 
   <!-- Lecteur Vidéo (PeerTube) -->
@@ -331,6 +347,7 @@
     const audioSelect = document.getElementById('audio-select');
     const toggleDownloadsBtn = document.getElementById('toggle-downloads-btn');
     const downloadList = document.getElementById('download-list');
+    const downloadItemsContainer = document.getElementById('download-items-container');
 
     function initAudioPlayer() {
       // Remplissage du menu déroulant
@@ -342,7 +359,7 @@
       });
 
       // Génération de la liste des liens de téléchargement direct
-      downloadList.innerHTML = '';
+      downloadItemsContainer.innerHTML = '';
       wavPlaylist.forEach((track) => {
         const item = document.createElement('div');
         item.className = 'download-item';
@@ -352,7 +369,7 @@
             ⬇️ Télécharger .mp3
           </a>
         `;
-        downloadList.appendChild(item);
+        downloadItemsContainer.appendChild(item);
       });
     }
 
