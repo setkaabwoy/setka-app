@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Setka - Site Officiel</title>
+  <title>Mon App Musique & Clips</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
     html {
       background-color: #000000;
       min-height: 100%;
     }
-
+    
     body {
       font-family: system-ui, sans-serif;
       background-color: #000000;
@@ -24,120 +25,206 @@
       min-height: 100vh;
     }
 
+    h1, h2 { 
+      text-align: center; 
+      color: #f39c12; 
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    }
+    
     .header {
       text-align: center;
       max-width: 650px;
-      margin: 0 auto 20px auto;
+      margin: 0 auto 30px auto;
     }
-
     .logo-svg {
-      width: 240px;
-      max-width: 80%;
+      width: 280px;
+      max-width: 85%;
       height: auto;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       display: block;
       margin-left: auto;
       margin-right: auto;
       filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.7));
     }
+    .welcome-text {
+      color: #fce072;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      font-weight: 500;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.9);
+      background: rgba(0, 0, 0, 0.55);
+      padding: 15px;
+      border-radius: 8px;
+    }
 
-    .main-container {
+    .player-container, .audio-section {
       max-width: 800px;
       margin: 0 auto 30px auto;
-      background: rgba(20, 20, 20, 0.85);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      padding: 25px;
+      background: rgba(20, 20, 20, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 20px;
       border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
     }
 
-    h1 {
-      text-align: center;
-      color: #f39c12;
-      margin-bottom: 20px;
-    }
-
-    /* LECTEUR AUDIO */
-    .player-section {
-      background: rgba(35, 35, 35, 0.9);
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 25px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      text-align: center;
-    }
-
-    select {
+    video, audio {
       width: 100%;
-      padding: 12px;
-      background: #111;
-      color: #fff;
-      border: 1px solid #f39c12;
-      border-radius: 8px;
+      border-radius: 6px;
+    }
+    video {
+      max-height: 450px;
+      background-color: #000;
+    }
+
+    .audio-select {
+      width: 100%;
+      padding: 12px 15px;
+      margin-top: 15px;
       font-size: 1rem;
-      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #f39c12;
+      background-color: rgba(30, 30, 30, 0.9);
+      color: #ffffff;
       outline: none;
+      cursor: pointer;
+    }
+    .audio-select option {
+      background-color: #1a1a1a;
+      color: #ffffff;
+      padding: 10px;
     }
 
-    audio {
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .card {
+      background: rgba(20, 20, 20, 0.8);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover { 
+      transform: scale(1.03); 
+      border-color: #f39c12;
+    }
+    .card img {
       width: 100%;
-      margin-top: 10px;
+      height: 130px;
+      object-fit: cover;
+    }
+    .card-title {
+      padding: 10px;
+      font-size: 0.9em;
+      font-weight: bold;
     }
 
-    /* BOUTONS NAV */
-    .nav-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-      margin-top: 20px;
+    /* SECTION BAS DE PAGE AVEC LE BOUTON TÉLÉCHARGEMENT */
+    .bottom-download-container {
+      text-align: center;
+      margin: 40px auto 20px auto;
+      max-width: 800px;
     }
 
-    .nav-btn {
+    .dl-page-btn {
       display: inline-block;
-      padding: 12px 24px;
+      padding: 14px 28px;
+      background-color: #27ae60;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 1.1rem;
+      text-decoration: none;
+      border-radius: 30px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+    }
+    .dl-page-btn:hover {
+      background-color: #2ecc71;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(39, 174, 96, 0.6);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-bottom: 20px;
+    }
+    .social-btn {
+      display: inline-block;
+      padding: 10px 20px;
       background-color: #f39c12;
       color: #000000;
-      text-decoration: none;
       font-weight: bold;
-      font-size: 1rem;
-      border-radius: 25px;
+      text-decoration: none;
+      border-radius: 20px;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     }
-
-    .nav-btn:hover {
+    .social-btn:hover {
       background-color: #f1c40f;
-      transform: scale(1.05);
+      transform: translateY(-2px);
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
+  <!-- ENTÊTE -->
+  <header class="header">
     <img src="path2.svg" alt="Setka Logo" class="logo-svg">
+    <p class="welcome-text">
+      Bienvenue chez setka,<br>
+      ici tes données ne seront pas revendues et aucune pub ne viendra<br>
+      altérer ton moment, certainement moins ergonomique que<br>
+      instagram, spotify ou autres applications farfelues,<br>
+      ici tu est dans un espace plus sur et plus éthique =)<br>
+      Merci de soutenir ma musique, bonne écoute/visionnage.
+    </p>
+  </header>
+
+  <!-- Lecteur Audio -->
+  <div class="audio-section">
+    <h2>Lecteur Audio</h2>
+    <audio id="audio-player" controls style="margin-bottom: 10px;"></audio>
+    <div id="audio-title" style="font-weight: bold; margin-bottom: 10px; text-align: center;">Sélectionne un morceau</div>
+
+    <select id="audio-select" class="audio-select">
+      <option value="" disabled selected>-- Choisis un son à écouter --</option>
+    </select>
   </div>
 
-  <div class="main-container">
-    <h1>🎧 Lecteur Audio</h1>
-
-    <div class="player-section">
-      <!-- SÉLECTEUR AVEC OPTION PAR DÉFAUT CORRECTEMENT BLOQUÉE -->
-      <select id="select-track" onchange="loadTrack()">
-        <option value="" selected disabled>-- Choisir un son à écouter --</option>
-      </select>
-
-      <audio id="audio-player" controls>
-        Votre navigateur ne supporte pas le lecteur audio.
-      </audio>
-    </div>
-
-    <div class="nav-buttons">
-      <a href="telechargements.html" class="nav-btn">📥 Zone de Téléchargement (.MP3)</a>
-    </div>
+  <!-- Lecteur Vidéo -->
+  <div class="player-container">
+    <h2>Clips & Vidéos</h2>
+    <video id="main-player" controls></video>
+    <h3 id="player-title" style="margin-top: 10px; font-size: 1.1em; text-align: center;">Sélectionne une vidéo</h3>
   </div>
+
+  <div class="grid" id="video-grid">
+    <p>Chargement des pistes...</p>
+  </div>
+
+  <!-- BOUTON EN BAS DE PAGE -->
+  <div class="bottom-download-container">
+    <a href="telechargements.html" class="dl-page-btn">
+      📥 Zone téléchargement
+    </a>
+  </div>
+
+  <!-- PIED DE PAGE -->
+  <footer>
+    <a href="https://video.antopie.org/c/setka_official/videos" target="_blank" rel="noopener" class="social-btn">
+      🎬 Suis-moi sur Antopie (PeerTube)
+    </a>
+  </footer>
 
   <script>
     const wavPlaylist = [
@@ -152,26 +239,114 @@
       { title: "Freestyle SKD", artist: "Setka", url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20freestyle%20SKD.mp3" }
     ];
 
-    const selectTrack = document.getElementById('select-track');
     const audioPlayer = document.getElementById('audio-player');
+    const audioTitle = document.getElementById('audio-title');
+    const audioSelect = document.getElementById('audio-select');
 
-    // Remplissage dynamique du sélecteur
-    wavPlaylist.forEach((track, index) => {
-      const option = document.createElement('option');
-      option.value = track.url;
-      option.textContent = `${track.artist} - ${track.title}`;
-      selectTrack.appendChild(option);
-    });
+    function initAudioPlayer() {
+      wavPlaylist.forEach((track, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${track.artist} - ${track.title}`;
+        audioSelect.appendChild(option);
+      });
+    }
 
-    // Charger et lancer le morceau
-    function loadTrack() {
-      const selectedUrl = selectTrack.value;
-      if (selectedUrl) {
-        audioPlayer.src = selectedUrl;
+    audioSelect.addEventListener('change', (e) => {
+      const index = e.target.value;
+      if (index !== "") {
+        const currentTrack = wavPlaylist[index];
+        audioPlayer.src = currentTrack.url;
+        audioTitle.textContent = `${currentTrack.artist} - ${currentTrack.title}`;
         audioPlayer.play();
       }
-    }
-  </script>
+    });
 
+    initAudioPlayer();
+
+    // PEERTUBE VIDEO
+    const INSTANCE = "https://video.antopie.org";
+    const CHANNEL = "setka_official";
+    const USERNAME = "setkaabwoy";
+    let hlsPlayer = null;
+
+    async function fetchVideos() {
+      const grid = document.getElementById('video-grid');
+      const endpoints = [
+        `${INSTANCE}/api/v1/video-channels/${CHANNEL}/videos`,
+        `${INSTANCE}/api/v1/accounts/${USERNAME}/videos`
+      ];
+
+      let videos = [];
+      for (const url of endpoints) {
+        try {
+          const response = await fetch(url);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.data && data.data.length > 0) {
+              videos = data.data;
+              break;
+            }
+          }
+        } catch (e) {
+          console.warn("Erreur :", e);
+        }
+      }
+
+      grid.innerHTML = '';
+      if (videos.length === 0) {
+        grid.innerHTML = '<p>Aucune vidéo trouvée.</p>';
+        return;
+      }
+
+      videos.forEach(video => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${INSTANCE}${video.thumbnailPath}" alt="${video.name}">
+          <div class="card-title">${video.name}</div>
+        `;
+        card.onclick = () => loadVideoDetails(video.id, video.name);
+        grid.appendChild(card);
+      });
+    }
+
+    async function loadVideoDetails(videoId, title) {
+      try {
+        const response = await fetch(`${INSTANCE}/api/v1/videos/${videoId}`);
+        const data = await response.json();
+        const player = document.getElementById('main-player');
+
+        if (!audioPlayer.paused) audioPlayer.pause();
+
+        let streamUrl = data.streamingPlaylists?.[0]?.playlistUrl || "";
+        let mp4Url = data.files?.[0]?.fileUrl || "";
+
+        document.getElementById('player-title').textContent = title;
+        player.pause();
+        player.removeAttribute('src');
+        player.load();
+
+        if (hlsPlayer) {
+          hlsPlayer.destroy();
+          hlsPlayer = null;
+        }
+
+        if (streamUrl && Hls.isSupported()) {
+          hlsPlayer = new Hls();
+          hlsPlayer.loadSource(streamUrl);
+          hlsPlayer.attachMedia(player);
+          hlsPlayer.on(Hls.Events.MANIFEST_PARSED, () => player.play().catch(() => {}));
+        } else if (mp4Url) {
+          player.src = mp4Url;
+          player.play().catch(() => {});
+        }
+      } catch (e) {
+        console.error("Erreur vidéo :", e);
+      }
+    }
+
+    fetchVideos();
+  </script>
 </body>
 </html>
