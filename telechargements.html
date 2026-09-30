@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zone Téléchargement - Setka</title>
+  <style>
+    html {
+      background-color: #000000;
+      min-height: 100%;
+    }
+    
+    body {
+      font-family: system-ui, sans-serif;
+      background-color: #000000;
+      background-image: url('./fond.png');
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: 100% auto;
+      background-attachment: scroll;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .header {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 20px auto;
+    }
+    
+    .logo-svg {
+      width: 240px;
+      max-width: 80%;
+      height: auto;
+      margin-bottom: 10px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.7));
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 8px 16px;
+      background-color: #334155;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      transition: background-color 0.2s;
+    }
+    .back-btn:hover {
+      background-color: #475569;
+    }
+
+    .dl-container {
+      max-width: 800px;
+      margin: 0 auto 30px auto;
+      background: rgba(20, 20, 20, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 25px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+    }
+
+    h1 {
+      text-align: center;
+      color: #f39c12;
+      margin-bottom: 20px;
+    }
+
+    /* GROS MESSAGE CLAIR ET LISIBLE EN HAUT */
+    .notice-box {
+      background: rgba(243, 156, 18, 0.15);
+      border: 2px solid #f39c12;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 25px;
+      text-align: center;
+      color: #fce072;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .notice-box strong {
+      color: #ffffff;
+    }
+
+    /* LISTE DES SONS AVEC BOUTON ACCOLLÉ */
+    .track-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .track-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(35, 35, 35, 0.9);
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      gap: 15px;
+    }
+
+    .track-name {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #ffffff;
+      word-break: break-word;
+    }
+
+    .download-btn {
+      display: inline-block;
+      padding: 10px 18px;
+      background-color: #27ae60;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.9rem;
+      border-radius: 20px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .download-btn:hover {
+      background-color: #2ecc71;
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="index.html" class="back-btn">⬅️ Retour à l'accueil</a>
+    <img src="path2.svg" alt="Setka Logo" class="logo-svg">
+  </div>
+
+  <div class="dl-container">
+    <h1>📥 Zone de Téléchargement (.MP3)</h1>
+
+    <!-- MESSAGE D'EXPLICATION CLAIR -->
+    <div class="notice-box">
+      ⚠️ <strong>Comment télécharger sur ton appareil :</strong><br>
+      Clique sur le bouton <strong>« Télécharger »</strong> à côté du morceau.<br>
+      Si le son s'ouvre sur une page noire dans ton navigateur au lieu de se télécharger, clique simplement sur les <strong>3 petits points (⋮)</strong> du lecteur audio puis sur <strong>« Enregistrer »</strong> (ou fais un clic droit > <em>Enregistrer l'audio sous...</em>).
+    </div>
+
+    <!-- LISTE DES MORCEAUX -->
+    <div class="track-list" id="track-list"></div>
+  </div>
+
+  <script>
+    const wavPlaylist = [
+      { title: "Jai pas vu lheure - Hill and Gully riddim (2026)", artist: "Setka", url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Jai%20pas%20vu%20lheure%20-%20Hill%20and%20Gully%20riddim%20%282026%29.mp3" },
+      { title: "Mirage (2023)", artist: "Setka", url: "https://setkamusic.s3.fr-par.scw.cloud/Mirage%20-%20Setka%20%282023%29.mp3" },
+      { title: "Musical buziness (2016)", artist: "Setka", url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Musical%20buziness%20%282016%29.mp3" },
+      { title: "Ghetto (2016)", artist: "Setka", url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Ghetto%20%282016%29.mp3" },
+      { title: "Policeman", artist: "Setka", url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Policeman.mp3" },
+      { title: "Remember", artist: "Setka", url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Remember.mp3" },
+      { title: "Vampayah buildings (2017)", artist: "Setka", url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Vampayah%20buildings%20%282017%29.mp3" },
+      { title: "Freestyle", artist: "Setka feat Makk Senseî", url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20feat%20Makk%20Sense%C3%AE%20-%20Freestyle.mp3" },
+      { title: "Freestyle SKD", artist: "Setka", url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20freestyle%20SKD.mp3" }
+    ];
+
+    const trackListContainer = document.getElementById('track-list');
+
+    wavPlaylist.forEach(track => {
+      const item = document.createElement('div');
+      item.className = 'track-item';
+      item.innerHTML = `
+        <span class="track-name">${track.artist} - ${track.title}</span>
+        <a href="${track.url}" download target="_blank" class="download-btn">
+          ⬇️️ Télécharger
+        </a>
+      `;
+      trackListContainer.appendChild(item);
+    });
+  </script>
+
+</body>
+</html>
