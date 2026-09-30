@@ -337,7 +337,7 @@
       }
     }
 
-    // Gestion de la force de téléchargement direct via Blob
+    // Gestion du téléchargement direct via Proxy CORS
     downloadBtn.addEventListener('click', async () => {
       if (!currentTrack) return;
 
@@ -346,10 +346,15 @@
       downloadBtn.disabled = true;
 
       try {
-        const response = await fetch(currentTrack.url);
-        const blob = await response.blob();
+        // Relais CORS pour éviter d'être bloqué par la sécurité Scaleway
+        const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(currentTrack.url);
+        const response = await fetch(proxyUrl);
         
+        if (!response.ok) throw new Error('Erreur réseau proxy');
+        
+        const blob = await response.blob();
         const blobUrl = window.URL.createObjectURL(blob);
+        
         const a = document.createElement('a');
         a.href = blobUrl;
         a.download = `${currentTrack.artist} - ${currentTrack.title}.mp3`;
@@ -360,7 +365,7 @@
         window.URL.revokeObjectURL(blobUrl);
       } catch (err) {
         console.error("Erreur de téléchargement :", err);
-        // Solution de secours si la sécurité navigateur bloque le fetch
+        // Solution de secours si jamais le proxy a un souci
         window.open(currentTrack.url, '_blank');
       } finally {
         downloadBtn.textContent = originalText;
