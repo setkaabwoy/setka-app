@@ -242,6 +242,7 @@
     const audioPlayer = document.getElementById('audio-player');
     const audioTitle = document.getElementById('audio-title');
     const audioSelect = document.getElementById('audio-select');
+    let currentTrackIndex = -1;
 
     function initAudioPlayer() {
       wavPlaylist.forEach((track, index) => {
@@ -252,13 +253,28 @@
       });
     }
 
-    audioSelect.addEventListener('change', (e) => {
-      const index = e.target.value;
-      if (index !== "") {
+    function playTrack(index) {
+      if (index >= 0 && index < wavPlaylist.length) {
+        currentTrackIndex = index;
         const currentTrack = wavPlaylist[index];
         audioPlayer.src = currentTrack.url;
         audioTitle.textContent = `${currentTrack.artist} - ${currentTrack.title}`;
-        audioPlayer.play();
+        audioSelect.value = index;
+        audioPlayer.play().catch(() => {});
+      }
+    }
+
+    audioSelect.addEventListener('change', (e) => {
+      const index = parseInt(e.target.value, 10);
+      if (!isNaN(index)) {
+        playTrack(index);
+      }
+    });
+
+    // ÉCOUTEUR 'ENDED' : Lance automatiquement le morceau suivant quand le premier se termine
+    audioPlayer.addEventListener('ended', () => {
+      if (currentTrackIndex + 1 < wavPlaylist.length) {
+        playTrack(currentTrackIndex + 1);
       }
     });
 
