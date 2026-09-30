@@ -57,6 +57,29 @@
       border-radius: 8px;
     }
 
+    /* BOUTON BIOGRAPHIE */
+    .bio-btn-container {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .bio-btn {
+      display: inline-block;
+      padding: 10px 22px;
+      background-color: #f39c12;
+      color: #000000;
+      font-weight: bold;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+    .bio-btn:hover {
+      background-color: #f1c40f;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(243, 156, 18, 0.4);
+    }
+
     .player-container, .audio-section {
       max-width: 800px;
       margin: 0 auto 30px auto;
@@ -220,6 +243,11 @@
       ici tu est dans un espace plus sur et plus éthique =)<br>
       Merci de soutenir ma musique, bonne écoute/visionnage.
     </p>
+
+    <!-- BOUTON C'EST QUI SETKA ? -->
+    <div class="bio-btn-container">
+      <a href="biographie.html" class="bio-btn">👤 C'est qui Setka ?</a>
+    </div>
   </header>
 
   <!-- Lecteur Audio -->
