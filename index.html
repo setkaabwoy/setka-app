@@ -60,7 +60,7 @@
     }
 
     /* CONTENEURS SEMI-TRANSPARENTS */
-    .player-container, .audio-section {
+    .player-container, .audio-section, .download-section {
       max-width: 800px;
       margin: 0 auto 30px auto;
       background: rgba(20, 20, 20, 0.75);
@@ -81,36 +81,66 @@
       background-color: #000;
     }
 
-    /* CONTENEUR BOUTON TÉLÉCHARGEMENT */
-    .download-container {
-      text-align: center;
-      margin-top: 12px;
-    }
-
-    .download-btn {
-      display: inline-block;
-      padding: 10px 18px;
+    /* BOUTONS ET INTERACTIONS */
+    .download-toggle-btn {
+      display: block;
+      width: 100%;
+      margin-top: 15px;
+      padding: 12px;
       background-color: #27ae60;
       color: #ffffff;
-      text-decoration: none;
       font-weight: bold;
-      font-size: 0.9rem;
+      font-size: 1rem;
       border: none;
-      border-radius: 20px;
+      border-radius: 8px;
       cursor: pointer;
+      text-align: center;
       transition: all 0.2s ease;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     }
-
-    .download-btn:hover {
+    .download-toggle-btn:hover {
       background-color: #2ecc71;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(39, 174, 96, 0.4);
     }
 
-    .download-btn:disabled {
-      background-color: #7f8c8d;
-      cursor: wait;
+    /* LISTE DES TÉLÉCHARGEMENTS */
+    .download-list {
+      display: none;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .download-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      background: rgba(30, 30, 30, 0.8);
+      border-radius: 6px;
+      gap: 10px;
+    }
+
+    .download-item-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      word-break: break-word;
+    }
+
+    .download-link-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      background-color: #f39c12;
+      color: #000000;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.8rem;
+      border-radius: 15px;
+      white-space: nowrap;
+      transition: background-color 0.2s;
+    }
+    .download-link-btn:hover {
+      background-color: #f1c40f;
     }
 
     /* STYLES MENU DÉROULANT AUDIO */
@@ -213,18 +243,19 @@
     <h2>Lecteur Audio</h2>
     <audio id="audio-player" controls style="margin-bottom: 10px;"></audio>
     <div id="audio-title" style="font-weight: bold; margin-bottom: 10px; text-align: center;">Sélectionne un morceau</div>
-    
-    <!-- Bouton de Téléchargement Direct -->
-    <div class="download-container">
-      <button id="download-btn" class="download-btn" style="display: none;">
-        ⬇️ Télécharge le morceau qui joue
-      </button>
-    </div>
 
     <!-- Menu déroulant pour la playlist -->
     <select id="audio-select" class="audio-select">
       <option value="" disabled selected>-- Choisis un son à écouter --</option>
     </select>
+
+    <!-- Bouton pour afficher/masquer la liste des téléchargements -->
+    <button id="toggle-downloads-btn" class="download-toggle-btn">
+      📥 Voir la liste des fichiers à télécharger (.MP3)
+    </button>
+
+    <!-- Zone contenant la liste complète des morceaux à télécharger -->
+    <div id="download-list" class="download-list"></div>
   </div>
 
   <!-- Lecteur Vidéo (PeerTube) -->
@@ -298,19 +329,34 @@
     const audioPlayer = document.getElementById('audio-player');
     const audioTitle = document.getElementById('audio-title');
     const audioSelect = document.getElementById('audio-select');
-    const downloadBtn = document.getElementById('download-btn');
-
-    let currentTrack = null;
+    const toggleDownloadsBtn = document.getElementById('toggle-downloads-btn');
+    const downloadList = document.getElementById('download-list');
 
     function initAudioPlayer() {
+      // Remplissage du menu déroulant
       wavPlaylist.forEach((track, index) => {
         const option = document.createElement('option');
         option.value = index;
         option.textContent = `${track.artist} - ${track.title}`;
         audioSelect.appendChild(option);
       });
+
+      // Génération de la liste des liens de téléchargement direct
+      downloadList.innerHTML = '';
+      wavPlaylist.forEach((track) => {
+        const item = document.createElement('div');
+        item.className = 'download-item';
+        item.innerHTML = `
+          <span class="download-item-title">${track.artist} - ${track.title}</span>
+          <a href="${track.url}" download target="_blank" class="download-link-btn">
+            ⬇️ Télécharger .mp3
+          </a>
+        `;
+        downloadList.appendChild(item);
+      });
     }
 
+    // Gestion du menu déroulant audio
     audioSelect.addEventListener('change', (e) => {
       const index = e.target.value;
       if (index !== "") {
@@ -319,14 +365,10 @@
     });
 
     function playAudio(index) {
-      currentTrack = wavPlaylist[index];
+      const currentTrack = wavPlaylist[index];
       audioPlayer.src = currentTrack.url;
       audioTitle.textContent = `${currentTrack.artist} - ${currentTrack.title}`;
       audioPlayer.play();
-
-      downloadBtn.style.display = 'inline-block';
-      downloadBtn.textContent = "⬇️ Télécharge le morceau qui joue";
-      downloadBtn.disabled = false;
 
       if ('mediaSession' in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
@@ -336,38 +378,14 @@
       }
     }
 
-    // Téléchargement direct avec proxy CORS
-    downloadBtn.addEventListener('click', async () => {
-      if (!currentTrack) return;
-
-      const originalText = downloadBtn.textContent;
-      downloadBtn.textContent = "⏳ Téléchargement en cours...";
-      downloadBtn.disabled = true;
-
-      const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(currentTrack.url);
-
-      try {
-        const response = await fetch(proxyUrl);
-        if (!response.ok) throw new Error("Erreur réseau");
-
-        const blob = await response.blob();
-        const blobUrl = window.URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = `${currentTrack.artist} - ${currentTrack.title}.mp3`;
-        document.body.appendChild(a);
-        a.click();
-
-        a.remove();
-        window.URL.revokeObjectURL(blobUrl);
-      } catch (err) {
-        console.error("Erreur téléchargement :", err);
-        // Solution de secours si le proxy ne répond pas
-        window.open(currentTrack.url, '_blank');
-      } finally {
-        downloadBtn.textContent = originalText;
-        downloadBtn.disabled = false;
+    // Bouton pour afficher / cacher la liste des téléchargements
+    toggleDownloadsBtn.addEventListener('click', () => {
+      if (downloadList.style.display === 'block') {
+        downloadList.style.display = 'none';
+        toggleDownloadsBtn.textContent = '📥 Voir la liste des fichiers à télécharger (.MP3)';
+      } else {
+        downloadList.style.display = 'block';
+        toggleDownloadsBtn.textContent = '❌ Masquer la liste des téléchargements';
       }
     });
 
