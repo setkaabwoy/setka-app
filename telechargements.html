@@ -3,13 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zone Téléchargement - Setka</title>
+  <title>Setka - Téléchargements</title>
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/svg+xml" href="setka logo 2.svg">
+
+  <!-- OPEN GRAPH (APERÇU RÉSEAUX SOCIAUX & WHATSAPP) -->
+  <meta property="og:title" content="Setka - Téléchargements">
+  <meta property="og:description" content="Télécharge gratuitement et librement les morceaux de Setka.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="P1011408.jpg">
+
   <style>
     html {
       background-color: #000000;
       min-height: 100%;
     }
-    
+
     body {
       font-family: system-ui, sans-serif;
       background-color: #000000;
@@ -24,93 +34,54 @@
       min-height: 100vh;
     }
 
-    .header {
-      text-align: center;
-      max-width: 650px;
-      margin: 0 auto 20px auto;
-    }
-    
-    .logo-svg {
-      width: 240px;
-      max-width: 80%;
-      height: auto;
-      margin-bottom: 10px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.7));
-    }
-
-    .back-btn {
-      display: inline-block;
-      margin-bottom: 20px;
-      padding: 8px 16px;
-      background-color: #334155;
-      color: #ffffff;
-      text-decoration: none;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 0.9rem;
-      transition: background-color 0.2s;
-    }
-    .back-btn:hover {
-      background-color: #475569;
-    }
-
-    .dl-container {
+    .container {
       max-width: 800px;
-      margin: 0 auto 30px auto;
+      margin: 0 auto;
       background: rgba(20, 20, 20, 0.85);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       padding: 25px;
       border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
     }
 
     h1 {
       text-align: center;
       color: #f39c12;
-      margin-bottom: 20px;
-    }
-
-    /* GROS MESSAGE CLAIR ET LISIBLE EN HAUT */
-    .notice-box {
-      background: rgba(243, 156, 18, 0.12);
-      border: 2px solid #f39c12;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 25px;
-      color: #ffffff;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      text-align: left;
-    }
-
-    .notice-box h2 {
-      color: #f39c12;
-      font-size: 1.1rem;
       margin-top: 0;
-      margin-bottom: 10px;
-      text-align: center;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     }
 
-    .notice-box ul {
-      margin: 10px 0 0 0;
-      padding-left: 20px;
+    .notice {
+      background: rgba(0, 0, 0, 0.55);
+      border-left: 4px solid #f39c12;
+      padding: 15px 20px;
+      margin-bottom: 25px;
+      border-radius: 6px;
+      line-height: 1.6;
+      font-size: 0.95rem;
     }
 
-    .notice-box li {
-      margin-bottom: 8px;
+    .notice h3 {
+      margin-top: 0;
+      color: #f39c12;
+      font-size: 1.05rem;
     }
 
-    .notice-box strong {
-      color: #fce072;
+    .notice p {
+      margin: 8px 0;
     }
 
-    /* LISTE DES SONS AVEC BOUTON ACCOLLÉ */
+    .notice ul {
+      margin: 5px 0 12px 20px;
+      padding: 0;
+    }
+
+    .notice li {
+      margin-bottom: 6px;
+    }
+
     .track-list {
       display: flex;
       flex-direction: column;
@@ -121,71 +92,105 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(35, 35, 35, 0.9);
+      background: rgba(30, 30, 30, 0.8);
       padding: 12px 18px;
       border-radius: 8px;
       border: 1px solid rgba(255, 255, 255, 0.05);
-      gap: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .track-name {
-      font-weight: 600;
-      font-size: 1rem;
+      font-weight: 500;
       color: #ffffff;
-      word-break: break-word;
+      flex: 1;
+      min-width: 200px;
     }
 
-    /* BOUTON TÉLÉCHARGER JAUNE DESSUS */
     .download-btn {
       display: inline-block;
-      padding: 10px 18px;
+      padding: 8px 16px;
       background-color: #f39c12;
       color: #000000;
-      text-decoration: none;
       font-weight: bold;
       font-size: 0.9rem;
+      text-decoration: none;
       border-radius: 20px;
-      white-space: nowrap;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
     }
 
     .download-btn:hover {
       background-color: #f1c40f;
-      transform: scale(1.03);
+      transform: translateY(-1px);
+    }
+
+    .back-btn-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      padding: 10px 22px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-color: #f39c12;
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <a href="index.html" class="back-btn">⬅️ Retour à l'accueil</a>
-    <img src="path2.svg" alt="Setka Logo" class="logo-svg">
-  </div>
+  <div class="container">
+    <h1>📥 Zone de Téléchargement</h1>
 
-  <div class="dl-container">
-    <h1>📥 Zone de Téléchargement (.MP3)</h1>
-
-    <!-- MESSAGE D'EXPLICATION RESTRUCTURÉ -->
-    <div class="notice-box">
-      <h2>⚠️ Comment télécharger les sons sur ton appareil</h2>
-      Clique sur le bouton <strong>« Télécharger »</strong> à côté du morceau.<br>
-      Si le son s'ouvre sur une page noire dans ton navigateur au lieu de se télécharger directement :
+    <!-- BLOC D'INSTRUCTIONS DE TÉLÉCHARGEMENT -->
+    <div class="notice">
+      <h3>⚠️ Comment télécharger les sons sur ton appareil</h3>
+      <p>Clique sur le bouton « Télécharger » à côté du morceau.</p>
+      <p>Si le son s'ouvre sur une page noire dans ton navigateur au lieu de se télécharger directement :</p>
+      
+      <p><strong>Android :</strong></p>
       <ul>
-        <li><strong>Android :</strong>
-          <ul>
-            <li><em>Mozilla :</em> reste appuyé sur le lecteur puis clique sur <strong>« Enregistrer le fichier »</strong>.</li>
-            <li><em>DuckDuckGo ou Chrome :</em> appuie sur les trois petits points (⋮) puis sur <strong>« Télécharger »</strong>.</li>
-          </ul>
-        </li>
-        <li><strong>iPhone (Safari) :</strong> appuie sur les trois petits points (⋮) en bas à droite ➔ <strong>Partager</strong> ➔ trois petits points (⋮) ➔ <strong>Enregistrer dans Fichiers</strong> ➔ <strong>Enregistrer</strong>.</li>
-        <li><strong>Windows :</strong> appuie sur les trois petits points (⋮) du lecteur puis sur <strong>« Télécharger »</strong>.</li>
-        <li><strong>Mac :</strong> fais un clic droit sur le lecteur puis sélectionne <strong>« Download Video As... »</strong> ou <strong>« Download Video »</strong>.</li>
+        <li><strong>Mozilla :</strong> reste appuyé sur le lecteur puis clique sur « Enregistrer le fichier ».</li>
+        <li><strong>DuckDuckGo ou Chrome :</strong> appuie sur les trois petits points (⋮) puis sur « Télécharger ».</li>
+      </ul>
+
+      <p><strong>iPhone (Safari) :</strong></p>
+      <ul>
+        <li>Appuie sur les trois petits points (⋮) en bas à droite ➔ Partager ➔ trois petits points (⋮) ➔ Enregistrer dans Fichiers ➔ Enregistrer.</li>
+      </ul>
+
+      <p><strong>Windows :</strong></p>
+      <ul>
+        <li><strong>DuckDuckGo :</strong> appuie sur les trois petits points (⋮) du lecteur puis sur « Télécharger ».</li>
+        <li><strong>Mozilla :</strong> Clic droit sur le lecteur puis appuyer sur "enregistrer le fichier audio sous ...".</li>
+        <li><strong>Chrome :</strong> appuyer sur les trois petits points (⋮) puis sur "télécharger".</li>
+      </ul>
+
+      <p><strong>Mac (Safari) :</strong></p>
+      <ul>
+        <li>Fais un clic droit sur le lecteur puis sélectionne « Download Video As... » ou « Download Video ».</li>
       </ul>
     </div>
 
-    <!-- LISTE DES MORCEAUX -->
-    <div class="track-list" id="track-list"></div>
+    <!-- LISTE DES MORCEAUX À TÉLÉCHARGER -->
+    <div class="track-list" id="download-list">
+      <!-- Généré automatiquement par JavaScript -->
+    </div>
+
+    <div class="back-btn-container">
+      <a href="index.html" class="back-btn">⬅️️ Retour au site principal</a>
+    </div>
   </div>
 
   <script>
@@ -201,20 +206,21 @@
       { title: "Freestyle SKD", artist: "Setka", url: "https://setkamusic.s3.fr-par.scw.cloud/Setka%20freestyle%20SKD.mp3" }
     ];
 
-    const trackListContainer = document.getElementById('track-list');
+    const downloadContainer = document.getElementById('download-list');
 
     wavPlaylist.forEach(track => {
       const item = document.createElement('div');
       item.className = 'track-item';
+      
+      const fileName = `${track.artist} - ${track.title}.mp3`;
+
       item.innerHTML = `
-        <span class="track-name">${track.artist} - ${track.title}</span>
-        <a href="${track.url}" download target="_blank" class="download-btn">
-          ⬇ Télécharger
-        </a>
+        <span class="track-name">🎵 ${track.artist} - ${track.title}</span>
+        <a href="${track.url}" download="${fileName}" target="_blank" class="download-btn">📥 Télécharger</a>
       `;
-      trackListContainer.appendChild(item);
+
+      downloadContainer.appendChild(item);
     });
   </script>
-
 </body>
 </html>
