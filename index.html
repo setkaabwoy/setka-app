@@ -8,10 +8,18 @@
   <!-- FAVICON POUR LE MARQUE-PAGE ET L'ONGLET -->
   <link rel="icon" type="image/svg+xml" href="setka logo 2.svg">
 
-  <!-- OPEN GRAPH (APERÇU RÉSEAUX SOCIAUX) -->
+  <!-- OPEN GRAPH (APERÇU RÉSEAUX SOCIAUX & WHATSAPP) -->
   <meta property="og:title" content="Setka, Site officiel">
   <meta property="og:description" content="Espace indépendant, éthique et sans pub pour écouter ma musique et visionner mes clips.">
   <meta property="og:type" content="website">
+  <meta property="og:image" content="P1011408.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+
+  <!-- TWITTER CARD -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Setka, Site officiel">
+  <meta name="twitter:description" content="Espace indépendant, éthique et sans pub pour écouter ma musique et visionner mes clips.">
+  <meta name="twitter:image" content="P1011408.jpg">
 
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
@@ -441,7 +449,6 @@
         }
 
         if (streamUrl && Hls.isSupported()) {
-          hlsPlayer = new Hls();
           hlsPlayer.loadSource(streamUrl);
           hlsPlayer.attachMedia(player);
           hlsPlayer.on(Hls.Events.MANIFEST_PARSED, () => player.play().catch(() => {}));
