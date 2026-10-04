@@ -1,9 +1,9 @@
 {
-  "id": "/setka-app/",
+  "id": "https://setkaabwoy.github.io/setka-app/",
   "name": "Setka — Site officiel",
   "short_name": "Setka",
-  "start_url": "/setka-app/index.html",
-  "scope": "/setka-app/",
+  "start_url": "https://setkaabwoy.github.io/setka-app/index.html",
+  "scope": "https://setkaabwoy.github.io/setka-app/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#000000",
