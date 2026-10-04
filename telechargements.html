@@ -130,7 +130,7 @@
       transform: translateY(-1px);
     }
 
-    /* Style du bloc de téléchargement APK */
+    /* Bloc de téléchargement APK & Notice iOS */
     .apk-container {
       text-align: center;
       margin-top: 35px;
@@ -156,9 +156,35 @@
       transform: translateY(-1px);
     }
 
+    .ios-notice {
+      margin: 20px auto 0 auto;
+      max-width: 600px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #d0d0d0;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .ios-notice p {
+      margin: 6px 0;
+    }
+
+    .ios-notice ul {
+      margin: 6px 0 6px 20px;
+      padding: 0;
+    }
+
+    .ios-notice li {
+      margin-bottom: 4px;
+    }
+
     .back-btn-container {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 25px;
     }
 
     .back-btn {
@@ -219,9 +245,18 @@
       <!-- Généré automatiquement par JavaScript -->
     </div>
 
-    <!-- BOUTON DE TÉLÉCHARGEMENT DE L'APPLICATION ANDROID -->
+    <!-- BOUTON DE TÉLÉCHARGEMENT DE L'APPLICATION ANDROID & INSTRUCTIONS IPHONE -->
     <div class="apk-container">
       <a href="setka.apk" download class="apk-btn">📱 Télécharger l'application pour Android (.apk)</a>
+
+      <div class="ios-notice">
+        <p><strong>J'ai un iphone et je veut quand meme installer l'application ? Voici la demarche à suivre :</strong></p>
+        <ul>
+          <li>Appuyer sur le bouton Partager (icône carré avec une flèche vers le haut).</li>
+          <li>Faire défiler et sélectionner Sur l'écran d'accueil.</li>
+          <li>Valider en appuyant sur Ajouter.</li>
+        </ul>
+      </div>
     </div>
 
     <div class="back-btn-container">
