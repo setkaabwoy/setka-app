@@ -47,6 +47,16 @@
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+  <!-- CONFIGURATION APPLICATION MOBILE (PWA) -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+
   <style>
     html {
       background-color: #000000;
