@@ -1,0 +1,17 @@
+{
+  "name": "Setka — Site officiel",
+  "short_name": "Setka",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "description": "Espace libre, indépendant et sans pub pour écouter la musique de Setka.",
+  "icons": [
+    {
+      "src": "setka logo 2.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
