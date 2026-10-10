@@ -277,4 +277,140 @@
 
       <div class="track-item">
         <span class="track-name">🎵 Setka - Vampayah buildings (2017)</span>
-        <a href="https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Vampayah%20buildings%20%282017%29.mp3" download="Setka - Vampayah buildings
+        <a href="https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Vampayah%20buildings%20%282017%29.mp3" download="Setka - Vampayah buildings (2017).mp3" target="_blank" class="download-btn">📥 Télécharger</a>
+      </div>
+
+      <div class="track-item">
+        <span class="track-name">🎵 Setka feat Makk Senseî - Freestyle</span>
+        <a href="https://setkamusic.s3.fr-par.scw.cloud/Setka%20feat%20Makk%20Sense%C3%AE%20-%20Freestyle.mp3" download="Setka feat Makk Senseî - Freestyle.mp3" target="_blank" class="download-btn">📥 Télécharger</a>
+      </div>
+
+      <div class="track-item">
+        <span class="track-name">🎵 Setka - Freestyle SKD</span>
+        <a href="https://setkamusic.s3.fr-par.scw.cloud/Setka%20freestyle%20SKD.mp3" download="Setka - Freestyle SKD.mp3" target="_blank" class="download-btn">📥 Télécharger</a>
+      </div>
+
+      <div class="track-item">
+        <span class="track-name">🎵 ChaB Piecito ft Osi C Town & Setka - Long Road</span>
+        <a href="https://setkamusic.s3.fr-par.scw.cloud/ChaB%20Piecito%20ft%20Osi%20C%20Town%20%26%20Setka%20-%20Long%20Road.mp3" download="ChaB Piecito ft Osi C Town & Setka - Long Road.mp3" target="_blank" class="download-btn">📥 Télécharger</a>
+      </div>
+
+      <div class="track-item">
+        <span class="track-name">🎵 VAPS ft SETKA - Wine Pon Mi (2018)</span>
+        <a href="https://setkamusic.s3.fr-par.scw.cloud/VAPS%20ft%20SETKA%20-%20Wine%20Pon%20Mi%20%282018%29.mp3" download="VAPS ft SETKA - Wine Pon Mi (2018).mp3" target="_blank" class="download-btn">📥 Télécharger</a>
+      </div>
+
+      <div class="track-item">
+        <span class="track-name">🎵 Little Lion meet Setka - Be Careful (#1)</span>
+        <a href="https://setkamusic.s3.fr-par.scw.cloud/LITTLE%20LION%20MEET%20SETKA%20%231%20-%20BE%20CAREFUL.mp3" download="Little Lion meet Setka - Be Careful (#1).mp3" target="_blank" class="download-btn">📥 Télécharger</a>
+      </div>
+
+      <div class="track-item">
+        <span class="track-name">🎵 Little Lion meet Setka - Dans la ville (#2)</span>
+        <a href="https://setkamusic.s3.fr-par.scw.cloud/LITTLE%20LION%20MEET%20SETKA%20%232%20-%20DANS%20LA%20VILLE.mp3" download="Little Lion meet Setka - Dans la ville (#2).mp3" target="_blank" class="download-btn">📥 Télécharger</a>
+      </div>
+
+      <div class="track-item">
+        <span class="track-name">🎵 Vaps & Setka - DTB</span>
+        <a href="https://setkamusic.s3.fr-par.scw.cloud/Vaps%20%26%20Setka%20-%20DTB.mp3" download="Vaps & Setka - DTB.mp3" target="_blank" class="download-btn">📥 Télécharger</a>
+      </div>
+
+    </div>
+
+    <!-- BOUTON DE TÉLÉCHARGEMENT DE L'APPLICATION ANDROID & INSTRUCTIONS IPHONE -->
+    <div class="apk-container">
+      <a href="setka.apk" download class="apk-btn">📱 Télécharger l'application pour Android (.apk)</a>
+
+      <div class="ios-notice">
+        <p><strong>J'ai un iphone et je veut quand meme installer l'application ? Voici la demarche à suivre :</strong></p>
+        <ul>
+          <li>Appuyer sur le bouton Partager (icône carré avec une flèche vers le haut).</li>
+          <li>Faire défiler et sélectionner Sur l'écran d'accueil.</li>
+          <li>Valider en appuyant sur Ajouter.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="back-btn-container">
+      <a href="index.html" class="back-btn">⬅ Retour au site principal</a>
+    </div>
+  </div>
+
+  <!-- SCRIPT : DÉTECTION DES NAVIGATEURS INTÉGRÉS (INSTAGRAM, FACEBOOK, TIKTOK...) -->
+  <script>
+    (function () {
+      const ua = navigator.userAgent || '';
+      const isInApp = /Instagram|FBAN|FBAV|FB_IAB|TikTok|musical_ly|BytedanceWebview|Snapchat/i.test(ua);
+      if (!isInApp) return;
+
+      const warning = document.getElementById('inapp-warning');
+      warning.style.display = 'block';
+
+      // Bouton « Copier le lien »
+      const copyBtn = document.getElementById('copy-link-btn');
+      copyBtn.addEventListener('click', async () => {
+        const url = window.location.href;
+        try {
+          await navigator.clipboard.writeText(url);
+          copyBtn.textContent = '✅ Lien copié !';
+        } catch (e) {
+          // Secours si la copie automatique est bloquée
+          window.prompt('Copie ce lien puis colle-le dans ton navigateur :', url);
+        }
+      });
+
+      // Bouton « Ouvrir dans Chrome » (Android uniquement, selon les cas)
+      if (/Android/i.test(ua)) {
+        const chromeBtn = document.getElementById('android-chrome-btn');
+        const fallback = encodeURIComponent(window.location.href);
+        chromeBtn.href = 'intent://' + window.location.host + window.location.pathname + window.location.search +
+          '#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' + fallback + ';end';
+        chromeBtn.style.display = 'inline-block';
+      }
+    })();
+  </script>
+
+  <!-- SCRIPT : FORCE LE TÉLÉCHARGEMENT DIRECT DES MORCEAUX -->
+  <script>
+    document.querySelectorAll('.download-btn').forEach(btn => {
+      // On ignore les boutons de l'encadré d'avertissement
+      if (!btn.hasAttribute('download')) return;
+
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const url = btn.href;
+        const filename = btn.getAttribute('download') || 'musique.mp3';
+        const originalText = btn.textContent;
+
+        btn.textContent = '⏳ Téléchargement...';
+        btn.classList.add('loading');
+
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error('Erreur ' + response.status);
+
+          const blob = await response.blob();
+          const blobUrl = URL.createObjectURL(blob);
+
+          const a = document.createElement('a');
+          a.href = blobUrl;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+        } catch (err) {
+          // Secours : si le téléchargement direct échoue, on ouvre le fichier comme avant
+          window.open(url, '_blank');
+        } finally {
+          btn.textContent = originalText;
+          btn.classList.remove('loading');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
