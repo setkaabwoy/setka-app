@@ -130,6 +130,11 @@
       transform: translateY(-1px);
     }
 
+    .download-btn.loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
     /* Bloc de téléchargement APK & Notice iOS */
     .apk-container {
       text-align: center;
@@ -333,6 +338,45 @@
       <a href="index.html" class="back-btn">⬅ Retour au site principal</a>
     </div>
   </div>
+
+  <!-- SCRIPT : FORCE LE TÉLÉCHARGEMENT DIRECT DES MORCEAUX -->
+  <script>
+    document.querySelectorAll('.download-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const url = btn.href;
+        const filename = btn.getAttribute('download') || 'musique.mp3';
+        const originalText = btn.textContent;
+
+        btn.textContent = '⏳ Téléchargement...';
+        btn.classList.add('loading');
+
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error('Erreur ' + response.status);
+
+          const blob = await response.blob();
+          const blobUrl = URL.createObjectURL(blob);
+
+          const a = document.createElement('a');
+          a.href = blobUrl;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+        } catch (err) {
+          // Secours : si le téléchargement direct échoue, on ouvre le fichier comme avant
+          window.open(url, '_blank');
+        } finally {
+          btn.textContent = originalText;
+          btn.classList.remove('loading');
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
