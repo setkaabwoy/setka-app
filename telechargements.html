@@ -58,33 +58,44 @@
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     }
 
-    .notice {
-      background: rgba(0, 0, 0, 0.55);
-      border-left: 4px solid #f39c12;
+    /* ENCADRÉ AFFICHÉ UNIQUEMENT DANS LES NAVIGATEURS INTÉGRÉS (INSTAGRAM, FACEBOOK, TIKTOK...) */
+    .inapp-warning {
+      display: none;
+      background: rgba(243, 156, 18, 0.15);
+      border: 2px solid #f39c12;
       padding: 15px 20px;
       margin-bottom: 25px;
-      border-radius: 6px;
+      border-radius: 8px;
       line-height: 1.6;
       font-size: 0.95rem;
     }
 
-    .notice h3 {
+    .inapp-warning h3 {
       margin-top: 0;
       color: #f39c12;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
     }
 
-    .notice p {
+    .inapp-warning p {
       margin: 8px 0;
     }
 
-    .notice ul {
+    .inapp-warning ul {
       margin: 5px 0 12px 20px;
       padding: 0;
     }
 
-    .notice li {
-      margin-bottom: 6px;
+    .inapp-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .inapp-actions .download-btn {
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
     }
 
     .track-list {
@@ -213,37 +224,23 @@
 <body>
 
   <div class="container">
-    <h1>📥 Zone de Téléchargement</h1>
 
-    <!-- BLOC D'INSTRUCTIONS DE TÉLÉCHARGEMENT -->
-    <div class="notice">
-      <h3>⚠️ Comment télécharger les sons sur ton appareil</h3>
-      <p>Clique sur le bouton « Télécharger » à côté du morceau.</p>
-      <p>Si le son s'ouvre sur une page noire dans ton navigateur au lieu de se télécharger directement :</p>
-      
-      <p><strong>Android :</strong></p>
+    <!-- AVERTISSEMENT NAVIGATEUR INTÉGRÉ (INSTAGRAM, FACEBOOK, TIKTOK...) : TOUT EN HAUT DE LA PAGE -->
+    <div class="inapp-warning" id="inapp-warning">
+      <h3>📲 Tu navigues depuis une application (Instagram, Facebook, TikTok...)</h3>
+      <p>Les téléchargements sont bloqués dans ce navigateur intégré. Pour télécharger les morceaux, ouvre cette page dans ton vrai navigateur (Chrome, Safari, Firefox...) :</p>
       <ul>
-        <li><strong>Mozilla :</strong> reste appuyé sur le lecteur puis clique sur « Enregistrer le fichier ».</li>
-        <li><strong>DuckDuckGo ou Chrome :</strong> appuie sur les trois petits points (⋮) puis sur « Télécharger ».</li>
+        <li>Appuie sur les trois petits points (⋯) en haut ou en bas de l'écran.</li>
+        <li>Choisis « Ouvrir dans le navigateur » (ou « Open in external browser »).</li>
       </ul>
-
-      <p><strong>iPhone (Safari) :</strong></p>
-      <ul>
-        <li>Appuie sur les trois petits points (⋮) en bas à droite ➔ Partager ➔ trois petits points (⋮) ➔ Enregistrer dans Fichiers ➔ Enregistrer.</li>
-      </ul>
-
-      <p><strong>Windows :</strong></p>
-      <ul>
-        <li><strong>DuckDuckGo :</strong> appuie sur les trois petits points (⋮) du lecteur puis sur « Télécharger ».</li>
-        <li><strong>Mozilla :</strong> Clic droit sur le lecteur puis appuyer sur "enregistrer le fichier audio sous ...".</li>
-        <li><strong>Chrome :</strong> appuyer sur les trois petits points (⋮) puis sur "télécharger".</li>
-      </ul>
-
-      <p><strong>Mac (Safari) :</strong></p>
-      <ul>
-        <li>Fais un clic droit sur le lecteur puis sélectionne « Download Video As... » ou « Download Video ».</li>
-      </ul>
+      <p>Ou copie le lien et colle-le dans ton navigateur :</p>
+      <div class="inapp-actions">
+        <button type="button" id="copy-link-btn" class="download-btn">📋 Copier le lien</button>
+        <a href="#" id="android-chrome-btn" class="download-btn" style="display:none;">🌐 Ouvrir dans Chrome</a>
+      </div>
     </div>
+
+    <h1>📥 Zone de Téléchargement</h1>
 
     <!-- LISTE DES MORCEAUX À TÉLÉCHARGER (ÉCRITE EN HTML PUR) -->
     <div class="track-list" id="download-list">
@@ -280,103 +277,4 @@
 
       <div class="track-item">
         <span class="track-name">🎵 Setka - Vampayah buildings (2017)</span>
-        <a href="https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Vampayah%20buildings%20%282017%29.mp3" download="Setka - Vampayah buildings (2017).mp3" target="_blank" class="download-btn">📥 Télécharger</a>
-      </div>
-
-      <div class="track-item">
-        <span class="track-name">🎵 Setka feat Makk Senseî - Freestyle</span>
-        <a href="https://setkamusic.s3.fr-par.scw.cloud/Setka%20feat%20Makk%20Sense%C3%AE%20-%20Freestyle.mp3" download="Setka feat Makk Senseî - Freestyle.mp3" target="_blank" class="download-btn">📥 Télécharger</a>
-      </div>
-
-      <div class="track-item">
-        <span class="track-name">🎵 Setka - Freestyle SKD</span>
-        <a href="https://setkamusic.s3.fr-par.scw.cloud/Setka%20freestyle%20SKD.mp3" download="Setka - Freestyle SKD.mp3" target="_blank" class="download-btn">📥 Télécharger</a>
-      </div>
-
-      <div class="track-item">
-        <span class="track-name">🎵 ChaB Piecito ft Osi C Town & Setka - Long Road</span>
-        <a href="https://setkamusic.s3.fr-par.scw.cloud/ChaB%20Piecito%20ft%20Osi%20C%20Town%20%26%20Setka%20-%20Long%20Road.mp3" download="ChaB Piecito ft Osi C Town & Setka - Long Road.mp3" target="_blank" class="download-btn">📥 Télécharger</a>
-      </div>
-
-      <div class="track-item">
-        <span class="track-name">🎵 VAPS ft SETKA - Wine Pon Mi (2018)</span>
-        <a href="https://setkamusic.s3.fr-par.scw.cloud/VAPS%20ft%20SETKA%20-%20Wine%20Pon%20Mi%20%282018%29.mp3" download="VAPS ft SETKA - Wine Pon Mi (2018).mp3" target="_blank" class="download-btn">📥 Télécharger</a>
-      </div>
-
-      <div class="track-item">
-        <span class="track-name">🎵 Little Lion meet Setka - Be Careful (#1)</span>
-        <a href="https://setkamusic.s3.fr-par.scw.cloud/LITTLE%20LION%20MEET%20SETKA%20%231%20-%20BE%20CAREFUL.mp3" download="Little Lion meet Setka - Be Careful (#1).mp3" target="_blank" class="download-btn">📥 Télécharger</a>
-      </div>
-
-      <div class="track-item">
-        <span class="track-name">🎵 Little Lion meet Setka - Dans la ville (#2)</span>
-        <a href="https://setkamusic.s3.fr-par.scw.cloud/LITTLE%20LION%20MEET%20SETKA%20%232%20-%20DANS%20LA%20VILLE.mp3" download="Little Lion meet Setka - Dans la ville (#2).mp3" target="_blank" class="download-btn">📥 Télécharger</a>
-      </div>
-
-      <div class="track-item">
-        <span class="track-name">🎵 Vaps & Setka - DTB</span>
-        <a href="https://setkamusic.s3.fr-par.scw.cloud/Vaps%20%26%20Setka%20-%20DTB.mp3" download="Vaps & Setka - DTB.mp3" target="_blank" class="download-btn">📥 Télécharger</a>
-      </div>
-
-    </div>
-
-    <!-- BOUTON DE TÉLÉCHARGEMENT DE L'APPLICATION ANDROID & INSTRUCTIONS IPHONE -->
-    <div class="apk-container">
-      <a href="setka.apk" download class="apk-btn">📱 Télécharger l'application pour Android (.apk)</a>
-
-      <div class="ios-notice">
-        <p><strong>J'ai un iphone et je veut quand meme installer l'application ? Voici la demarche à suivre :</strong></p>
-        <ul>
-          <li>Appuyer sur le bouton Partager (icône carré avec une flèche vers le haut).</li>
-          <li>Faire défiler et sélectionner Sur l'écran d'accueil.</li>
-          <li>Valider en appuyant sur Ajouter.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="back-btn-container">
-      <a href="index.html" class="back-btn">⬅ Retour au site principal</a>
-    </div>
-  </div>
-
-  <!-- SCRIPT : FORCE LE TÉLÉCHARGEMENT DIRECT DES MORCEAUX -->
-  <script>
-    document.querySelectorAll('.download-btn').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
-        e.preventDefault();
-
-        const url = btn.href;
-        const filename = btn.getAttribute('download') || 'musique.mp3';
-        const originalText = btn.textContent;
-
-        btn.textContent = '⏳ Téléchargement...';
-        btn.classList.add('loading');
-
-        try {
-          const response = await fetch(url);
-          if (!response.ok) throw new Error('Erreur ' + response.status);
-
-          const blob = await response.blob();
-          const blobUrl = URL.createObjectURL(blob);
-
-          const a = document.createElement('a');
-          a.href = blobUrl;
-          a.download = filename;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-
-          setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
-        } catch (err) {
-          // Secours : si le téléchargement direct échoue, on ouvre le fichier comme avant
-          window.open(url, '_blank');
-        } finally {
-          btn.textContent = originalText;
-          btn.classList.remove('loading');
-        }
-      });
-    });
-  </script>
-
-</body>
-</html>
+        <a href="https://setkamusic.s3.fr-par.scw.cloud/Setka%20-%20Vampayah%20buildings%20%282017%29.mp3" download="Setka - Vampayah buildings
