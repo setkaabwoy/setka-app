@@ -171,14 +171,35 @@
       padding: 10px;
     }
 
+    /* LISTE DES VIDÉOS SUR UNE SEULE LIGNE (DÉFILEMENT HORIZONTAL) */
     .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      display: flex;
+      flex-wrap: nowrap;
       gap: 20px;
       max-width: 1000px;
       margin: 0 auto;
+      padding: 8px 4px 16px 4px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x proximity;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: #f39c12 rgba(255, 255, 255, 0.1);
+    }
+    .grid::-webkit-scrollbar {
+      height: 8px;
+    }
+    .grid::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+    .grid::-webkit-scrollbar-thumb {
+      background: #f39c12;
+      border-radius: 4px;
     }
     .card {
+      flex: 0 0 220px;
+      scroll-snap-align: start;
       background: rgba(20, 20, 20, 0.8);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
@@ -347,8 +368,9 @@
 
   <!-- BOUTON DE DON TIPEEE (SIMPLE LIEN, SANS SCRIPT TIERS) -->
   <div class="donate-container">
+    <p class="donate-text">Tu aimes ma musique ? Tu peux soutenir mon travail en faisant un don :</p>
     <a href="https://fr.tipeee.com/setkaabwoy/" target="_blank" rel="noopener" class="dl-page-btn">
-      ❤️ Faire un don sur Tipeee
+      💛 Soutenir Setka sur Tipeee
     </a>
   </div>
 
