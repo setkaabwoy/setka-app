@@ -36,7 +36,57 @@
       color: #ffffff;
       margin: 0;
       padding: 20px;
+      padding-top: 80px; /* place pour le bandeau fixe (téléphone / petits écrans) */
       min-height: 100vh;
+    }
+
+    /* LOGO FIXE EN HAUT : BANDEAU TRANSPARENT FLOUTÉ (TÉLÉPHONE, TABLETTE, PETITES FENÊTRES) */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      box-sizing: border-box;
+      background: rgba(70, 70, 70, 0.45);
+      -webkit-backdrop-filter: blur(12px) saturate(140%);
+      backdrop-filter: blur(12px) saturate(140%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      z-index: 1000;
+    }
+    .top-bar a {
+      display: inline-flex;
+      align-items: center;
+    }
+    .top-bar img {
+      height: 40px;
+      width: auto;
+      max-width: 160px;
+      display: block;
+      filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.6));
+    }
+
+    /* GRANDS ÉCRANS : PETIT LOGO FLOTTANT EN HAUT À GAUCHE, SANS BANDEAU */
+    @media (min-width: 1280px) {
+      body {
+        padding-top: 20px;
+      }
+      .top-bar {
+        right: auto;
+        height: auto;
+        padding: 16px 20px;
+        background: none;
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        border-bottom: none;
+      }
+      .top-bar img {
+        height: auto;
+        width: 90px;
+      }
     }
 
     .container {
@@ -254,6 +304,13 @@
   </style>
 </head>
 <body>
+
+  <!-- LOGO FIXE : BANDEAU FLOUTÉ SUR TÉLÉPHONE, PETIT LOGO FLOTTANT SUR GRAND ÉCRAN -->
+  <div class="top-bar">
+    <a href="index.html" aria-label="Setka - accueil">
+      <img src="Logo2026.svg" alt="Setka Logo">
+    </a>
+  </div>
 
   <div class="container">
 
