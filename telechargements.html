@@ -146,6 +146,38 @@
       pointer-events: none;
     }
 
+    .download-btn.done {
+      background-color: #238636;
+      color: #ffffff;
+      pointer-events: none;
+    }
+
+    /* PETIT MESSAGE DE CONFIRMATION EN BAS DE L'ÉCRAN */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 25px;
+      transform: translateX(-50%) translateY(20px);
+      max-width: 90%;
+      background: rgba(35, 134, 54, 0.95);
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     /* Bloc de téléchargement APK & Notice iOS */
     .apk-container {
       text-align: center;
@@ -336,6 +368,9 @@
     </div>
   </div>
 
+  <!-- MESSAGE DE CONFIRMATION (TOAST) -->
+  <div class="toast" id="toast"></div>
+
   <!-- SCRIPT : DÉTECTION DES NAVIGATEURS INTÉGRÉS (INSTAGRAM, FACEBOOK, TIKTOK...) -->
   <script>
     (function () {
@@ -371,8 +406,18 @@
     })();
   </script>
 
-  <!-- SCRIPT : FORCE LE TÉLÉCHARGEMENT DIRECT DES MORCEAUX -->
+  <!-- SCRIPT : FORCE LE TÉLÉCHARGEMENT DIRECT DES MORCEAUX, AVEC RETOUR VISUEL -->
   <script>
+    const toast = document.getElementById('toast');
+    let toastTimer = null;
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
+    }
+
     document.querySelectorAll('.download-btn').forEach(btn => {
       // On ignore les boutons de l'encadré d'avertissement
       if (!btn.hasAttribute('download')) return;
@@ -383,31 +428,59 @@
         const url = btn.href;
         const filename = btn.getAttribute('download') || 'musique.mp3';
         const originalText = btn.textContent;
+        let success = false;
 
-        btn.textContent = '⏳ Téléchargement...';
+        btn.textContent = '⏳ Démarrage...';
         btn.classList.add('loading');
 
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error('Erreur ' + response.status);
 
-          const blob = await response.blob();
-          const blobUrl = URL.createObjectURL(blob);
+          let blob;
+          if (response.body && response.body.getReader) {
+            // Lecture progressive : on affiche la quantité reçue pendant le téléchargement
+            const reader = response.body.getReader();
+            const chunks = [];
+            let received = 0;
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              chunks.push(value);
+              received += value.length;
+              btn.textContent = '⏳ ' + (received / 1048576).toFixed(1).replace('.', ',') + ' Mo';
+            }
+            blob = new Blob(chunks, { type: 'audio/mpeg' });
+          } else {
+            blob = await response.blob();
+          }
 
+          const blobUrl = URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = blobUrl;
           a.download = filename;
           document.body.appendChild(a);
           a.click();
           a.remove();
-
           setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+
+          success = true;
         } catch (err) {
           // Secours : si le téléchargement direct échoue, on ouvre le fichier comme avant
           window.open(url, '_blank');
         } finally {
-          btn.textContent = originalText;
           btn.classList.remove('loading');
+          if (success) {
+            btn.classList.add('done');
+            btn.textContent = '✅ Téléchargé !';
+            showToast('✅ Fichier enregistré dans tes Téléchargements');
+            setTimeout(() => {
+              btn.classList.remove('done');
+              btn.textContent = originalText;
+            }, 4000);
+          } else {
+            btn.textContent = originalText;
+          }
         }
       });
     });
