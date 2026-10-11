@@ -228,7 +228,7 @@
     <!-- AVERTISSEMENT NAVIGATEUR INTÉGRÉ (INSTAGRAM, FACEBOOK, TIKTOK...) : TOUT EN HAUT DE LA PAGE -->
     <div class="inapp-warning" id="inapp-warning">
       <h3>📲 Tu navigues depuis une application (Instagram, Facebook, TikTok...)</h3>
-      <p>Les téléchargements sont bloqués dans ce navigateur intégré. Pour télécharger les morceaux, ouvre cette page dans ton vrai navigateur (Chrome, Safari, Firefox...) :</p>
+      <p>Les téléchargements sont bloqués dans ce navigateur intégré. Pour télécharger les morceaux, ouvre cette page dans ton vrai navigateur (celui que tu utilises d'habitude) :</p>
       <ul>
         <li>Appuie sur les trois petits points (⋯) en haut ou en bas de l'écran.</li>
         <li>Choisis « Ouvrir dans le navigateur » (ou « Open in external browser »).</li>
@@ -236,7 +236,7 @@
       <p>Ou copie le lien et colle-le dans ton navigateur :</p>
       <div class="inapp-actions">
         <button type="button" id="copy-link-btn" class="download-btn">📋 Copier le lien</button>
-        <a href="#" id="android-chrome-btn" class="download-btn" style="display:none;">🌐 Ouvrir dans Chrome</a>
+        <a href="#" id="android-open-btn" class="download-btn" style="display:none;">🌐 Ouvrir dans mon navigateur</a>
       </div>
     </div>
 
@@ -359,13 +359,14 @@
         }
       });
 
-      // Bouton « Ouvrir dans Chrome » (Android uniquement, selon les cas)
+      // Bouton « Ouvrir dans mon navigateur » (Android uniquement) :
+      // aucun navigateur imposé, Android utilise celui choisi par défaut ou propose la liste
       if (/Android/i.test(ua)) {
-        const chromeBtn = document.getElementById('android-chrome-btn');
+        const openBtn = document.getElementById('android-open-btn');
         const fallback = encodeURIComponent(window.location.href);
-        chromeBtn.href = 'intent://' + window.location.host + window.location.pathname + window.location.search +
-          '#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' + fallback + ';end';
-        chromeBtn.style.display = 'inline-block';
+        openBtn.href = 'intent://' + window.location.host + window.location.pathname + window.location.search +
+          '#Intent;scheme=https;action=android.intent.action.VIEW;S.browser_fallback_url=' + fallback + ';end';
+        openBtn.style.display = 'inline-block';
       }
     })();
   </script>
